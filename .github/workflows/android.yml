@@ -36,7 +36,7 @@ jobs:
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
         message: "Step 2/6: JDK 17 configured"
 
-    - name: Set up Gradle
+    - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: '8.4'
@@ -49,9 +49,9 @@ jobs:
         message: "Step 3/6: Gradle environment ready"
 
     - name: Build Debug APK
-      run: chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+      run: gradle assembleDebug --no-daemon --info --stacktrace
 
-    - name: Report – Build finished
+    - name: Report – Build completed
       if: success()
       uses: appleboy/telegram-action@v0.1.1
       with:
@@ -69,8 +69,8 @@ jobs:
         path: FlowStable-Wallet-Latest.apk
 
     - name: Create Release
-      if: github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v1
+      if: github.ref == 'refs/heads/main'
       with:
         tag_name: latest
         name: Latest Continuous Build
