@@ -147,7 +147,7 @@ fun TokenDetailScreen(
                     }
                     uriHandler.openUri(url)
                 }) {
-                    Icon(Icons.Default.OpenInNew, contentDescription = "View on Explorer", tint = BrutalBlack)
+                    Icon(Icons.Filled.OpenInNew, contentDescription = "View on Explorer", tint = BrutalBlack)
                 }
             }
             

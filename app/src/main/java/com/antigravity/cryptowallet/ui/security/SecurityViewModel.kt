@@ -30,4 +30,8 @@ class SecurityViewModel @Inject constructor(
     fun getMnemonic(): String {
         return secureStorage.getMnemonic() ?: "No seed phrase found"
     }
+
+    fun logout() {
+        secureStorage.clearWallet()
+    }
 }
