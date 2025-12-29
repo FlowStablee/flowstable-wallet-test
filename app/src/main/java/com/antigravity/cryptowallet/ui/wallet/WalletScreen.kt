@@ -58,7 +58,8 @@ import androidx.compose.ui.graphics.Color
 @HiltViewModel
 class WalletViewModel @Inject constructor(
     private val walletRepository: WalletRepository,
-    private val assetRepository: AssetRepository
+    private val assetRepository: AssetRepository,
+    private val networkRepository: NetworkRepository
 ) : ViewModel() {
     val address: String
         get() = walletRepository.getAddress()
