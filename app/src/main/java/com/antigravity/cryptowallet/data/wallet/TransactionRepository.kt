@@ -18,7 +18,7 @@ class TransactionRepository @Inject constructor(
 ) {
     val transactions: Flow<List<TransactionEntity>> = transactionDao.getAllTransactions()
 
-    suspend fun refreshTransactions(address: String, network: com.antigravity.cryptowallet.data.blockchain.Network) = withContext(Dispatchers.IO) {
+    suspend fun refreshTransactions(address: String, network: Network) = withContext(Dispatchers.IO) {
         val apiUrl = network.explorerApiUrl ?: return@withContext
         
         try {

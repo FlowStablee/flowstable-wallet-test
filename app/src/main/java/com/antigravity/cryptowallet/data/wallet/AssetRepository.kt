@@ -57,8 +57,8 @@ class AssetRepository @Inject constructor(
             e.printStackTrace()
             emptyList()
         }
-        val prices = coinCapData.associate { it.id to (it.priceUsd?.toDouble() ?: 0.0) }
-        val priceChanges = coinCapData.associate { it.id to (it.changePercent24h?.toDouble() ?: 0.0) }
+        val prices = coinCapData.associate { it.id to (it.priceUsd?.toDoubleOrNull() ?: 0.0) }
+        val priceChanges = coinCapData.associate { it.id to (it.changePercent24h?.toDoubleOrNull() ?: 0.0) }
 
         // 3. Fetch Native & Token Balances in Parallel
         val allNetworks = networkRepository.networks
@@ -114,7 +114,7 @@ class AssetRepository @Inject constructor(
                                 try {
                                     val dexResponse = dexscreenerApi.getTokenPairs(token.contractAddress)
                                     val dexData = dexResponse.pairs?.maxByOrNull { it.volume?.h24 ?: 0.0 }
-                                    price = dexData?.priceUsd?.toDouble() ?: 0.0
+                                    price = dexData?.priceUsd?.toDoubleOrNull() ?: 0.0
                                     priceChange = dexData?.priceChange?.h24 ?: 0.0
                                 } catch (e: Exception) { }
                             }

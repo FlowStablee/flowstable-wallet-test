@@ -44,6 +44,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import com.antigravity.cryptowallet.utils.QrCodeGenerator
+import com.antigravity.cryptowallet.data.models.AssetUiModel
+import com.antigravity.cryptowallet.data.blockchain.Network
+import androidx.compose.material.icons.Icons
 
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
@@ -66,7 +69,7 @@ class WalletViewModel @Inject constructor(
     
     // UI State
     var totalBalanceUsd by mutableStateOf("$0.00")
-    var assets by mutableStateOf<List<com.antigravity.cryptowallet.data.models.AssetUiModel>>(emptyList())
+    var assets by mutableStateOf<List<AssetUiModel>>(emptyList())
     var isRefreshing by mutableStateOf(false)
     
     // Tab State
@@ -76,7 +79,7 @@ class WalletViewModel @Inject constructor(
     // Search State
     var searchQuery by mutableStateOf("")
     
-    val filteredAssets: List<com.antigravity.cryptowallet.data.models.AssetUiModel>
+    val filteredAssets: List<AssetUiModel>
         get() = if (searchQuery.isEmpty()) {
             assets
         } else {
@@ -99,7 +102,7 @@ class WalletViewModel @Inject constructor(
 
     fun getNetwork(id: String) = networkRepository.getNetwork(id)
 
-    suspend fun sendAsset(asset: com.antigravity.cryptowallet.data.models.AssetUiModel, toAddress: String, amount: String): String {
+    suspend fun sendAsset(asset: AssetUiModel, toAddress: String, amount: String): String {
         return assetRepository.sendAsset(asset, toAddress, amount)
     }
 
@@ -338,8 +341,8 @@ fun WalletScreen(
                 androidx.compose.material3.IconButton(
                     onClick = { viewModel.refresh() }
                 ) {
-                    androidx.compose.material3.Icon(
-                        imageVector = Icons.Filled.Refresh,
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
                         contentDescription = "Refresh",
                         tint = BrutalBlack,
                         modifier = Modifier.size(32.dp)
@@ -348,8 +351,8 @@ fun WalletScreen(
                     androidx.compose.material3.IconButton(
                         onClick = onSetupSecurity
                     ) {
-                        androidx.compose.material3.Icon(
-                            imageVector = Icons.Filled.Settings,
+                        Icon(
+                            imageVector = Icons.Default.Settings,
                             contentDescription = "Settings",
                             tint = BrutalBlack,
                             modifier = Modifier.size(32.dp)
