@@ -38,6 +38,8 @@ import androidx.compose.foundation.Image
 fun TokenDetailScreen(
     assetId: String,
     onBack: () -> Unit,
+    onNavigateToSend: (String) -> Unit = {},
+    onNavigateToTxDetail: (String) -> Unit = {},
     viewModel: WalletViewModel = hiltViewModel(),
     historyViewModel: HistoryViewModel = hiltViewModel()
 ) {
@@ -113,18 +115,40 @@ fun TokenDetailScreen(
                 .border(2.dp, BrutalBlack)
                 .padding(24.dp)
         ) {
-            Text(
-                asset.name.uppercase(),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-            Text(
-                asset.balanceUsd,
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Black,
-                color = BrutalBlack
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        asset.name.uppercase(),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray
+                    )
+                    Text(
+                        asset.balanceUsd,
+                        fontSize = 42.sp,
+                        fontWeight = FontWeight.Black,
+                        color = BrutalBlack
+                    )
+                }
+                
+                // Explorer Icon Button
+                val uriHandler = androidx.compose.ui.platform.LocalUriHandler.current
+                IconButton(onClick = {
+                    val network = viewModel.getNetwork(asset.chainId)
+                    val url = if (asset.contractAddress != null) {
+                        "${network.explorerUrl}token/${asset.contractAddress}"
+                    } else {
+                        "${network.explorerUrl}address/${viewModel.address}"
+                    }
+                    uriHandler.openUri(url)
+                }) {
+                    Icon(Icons.Default.OpenInNew, contentDescription = "View on Explorer", tint = BrutalBlack)
+                }
+            }
             
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val isPositive = asset.priceChange24h >= 0
@@ -214,6 +238,7 @@ fun TokenDetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .border(1.dp, BrutalBlack)
+                            .clickable { onNavigateToTxDetail(tx.hash) }
                             .padding(12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
@@ -251,7 +276,7 @@ fun TokenDetailScreen(
         ) {
             BrutalistButton(
                 text = "SEND",
-                onClick = { /* In a real app, we'd navigate to Send with state */ },
+                onClick = { onNavigateToSend(asset.id) },
                 modifier = Modifier.weight(1f)
             )
             BrutalistButton(

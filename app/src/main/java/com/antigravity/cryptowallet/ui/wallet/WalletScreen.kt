@@ -95,14 +95,10 @@ class WalletViewModel @Inject constructor(
         }
     }
 
-    fun sendAsset(asset: com.antigravity.cryptowallet.data.models.AssetUiModel, toAddress: String, amount: String) {
-        viewModelScope.launch {
-            try {
-                assetRepository.sendAsset(asset, toAddress, amount)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+    fun getNetwork(id: String) = networkRepository.getNetwork(id)
+
+    suspend fun sendAsset(asset: com.antigravity.cryptowallet.data.models.AssetUiModel, toAddress: String, amount: String): String {
+        return assetRepository.sendAsset(asset, toAddress, amount)
     }
 
     fun refresh() {

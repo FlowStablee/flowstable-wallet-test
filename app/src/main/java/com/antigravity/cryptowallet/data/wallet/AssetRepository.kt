@@ -58,15 +58,14 @@ class AssetRepository @Inject constructor(
         val resultList = mutableListOf<AssetUiModel>()
 
         // 3. Fetch Native & Token Balances in Parallel
-        val mainNetworks = listOf("eth", "bsc", "matic")
+        val allNetworks = networkRepository.networks
         val resultList = java.util.Collections.synchronizedList(mutableListOf<AssetUiModel>())
 
         coroutineScope {
             // Native Balances
-            val nativeJobs = mainNetworks.map { netId ->
+            val nativeJobs = allNetworks.map { net ->
                 async {
                     try {
-                        val net = networkRepository.getNetwork(netId)
                         val balance = blockchainService.getBalance(net.rpcUrl, address)
                         val ethBalance = BigDecimal(balance).divide(BigDecimal.TEN.pow(18))
                         val price = prices[net.coingeckoId] ?: 0.0

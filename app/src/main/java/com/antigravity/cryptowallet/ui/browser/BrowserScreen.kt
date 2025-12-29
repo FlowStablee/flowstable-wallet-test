@@ -30,6 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.Image
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
 import com.antigravity.cryptowallet.ui.theme.BrutalBlack
 import com.antigravity.cryptowallet.ui.theme.BrutalWhite
@@ -43,14 +49,16 @@ fun BrowserScreen(
 ) {
     val walletRepository = viewModel.walletRepository
     val networkRepository = viewModel.networkRepository
-    var url by remember { mutableStateOf("https://pancakeswap.finance") }
-    var inputUrl by remember { mutableStateOf("https://pancakeswap.finance") }
+    val address = walletRepository.getAddress()
+    
+    // UI State
+    var url by remember { mutableStateOf("") }
+    var inputUrl by remember { mutableStateOf("") }
     var webView: WebView? by remember { mutableStateOf(null) }
+    var isDiscoverMode by remember { mutableStateOf(true) }
     
     var currentNetwork by remember { mutableStateOf(networkRepository.networks.first()) }
     var showChainSelector by remember { mutableStateOf(false) }
-    
-    val address = walletRepository.getAddress()
     
     // Web3 Confirmation State
     var pendingRequest by remember { mutableStateOf<Web3Bridge.Web3Request?>(null) }
@@ -70,8 +78,12 @@ fun BrowserScreen(
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { url = "https://google.com" }) {
-                Icon(Icons.Default.Home, contentDescription = "Home", tint = BrutalBlack)
+            IconButton(onClick = { 
+                url = ""
+                inputUrl = ""
+                isDiscoverMode = true
+            }) {
+                Icon(Icons.Default.Home, contentDescription = "Discover", tint = BrutalBlack)
             }
             
             Box(
@@ -90,7 +102,10 @@ fun BrowserScreen(
                     ),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
                     keyboardActions = KeyboardActions(onGo = {
-                        url = if (!inputUrl.startsWith("http")) "https://$inputUrl" else inputUrl
+                        if (inputUrl.isNotBlank()) {
+                            url = if (!inputUrl.startsWith("http")) "https://$inputUrl" else inputUrl
+                            isDiscoverMode = false
+                        }
                     }),
                     singleLine = true,
                     cursorBrush = SolidColor(BrutalBlack),
@@ -99,7 +114,10 @@ fun BrowserScreen(
             }
             
             IconButton(onClick = {
-                url = if (!inputUrl.startsWith("http")) "https://$inputUrl" else inputUrl
+                if (inputUrl.isNotBlank()) {
+                    url = if (!inputUrl.startsWith("http")) "https://$inputUrl" else inputUrl
+                    isDiscoverMode = false
+                }
             }) {
                 Icon(Icons.Default.Search, contentDescription = "Go", tint = BrutalBlack)
             }
@@ -123,54 +141,62 @@ fun BrowserScreen(
             }
         }
 
-        // WebView
+        // Content Area
         Box(modifier = Modifier.weight(1f)) {
-            AndroidView(
-                factory = { context ->
-                    WebView(context).apply {
-                        settings.javaScriptEnabled = true
-                        settings.domStorageEnabled = true
-                        settings.databaseEnabled = true
-                        settings.loadWithOverviewMode = true
-                        settings.useWideViewPort = true
-                        
-                        // Support Mixed Content (HTTP on HTTPS) - sometimes needed
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                            settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
-                        }
-                        
-                        val bridge = Web3Bridge(this, address, currentNetwork.chainId) { request ->
-                            pendingRequest = request
-                        }
-                        bridgeInstance = bridge
-                        addJavascriptInterface(bridge, "androidWallet")
-                        
-                        webViewClient = object : WebViewClient() {
-                            override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
-                                super.onPageStarted(view, url, favicon)
-                                view?.evaluateJavascript(bridge.getInjectionJs(), null)
+            if (isDiscoverMode) {
+                DAppDiscoveryView(onDAppClick = { dAppUrl ->
+                    inputUrl = dAppUrl
+                    url = dAppUrl
+                    isDiscoverMode = false
+                })
+            } else {
+                AndroidView(
+                    factory = { context ->
+                        WebView(context).apply {
+                            settings.javaScriptEnabled = true
+                            settings.domStorageEnabled = true
+                            settings.databaseEnabled = true
+                            settings.loadWithOverviewMode = true
+                            settings.useWideViewPort = true
+                            settings.userAgentString = "Mozilla/5.0 (Linux; Android 10; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.119 Mobile Safari/537.36"
+                            
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
                             }
                             
-                            override fun onPageFinished(view: WebView?, url: String?) {
-                                super.onPageFinished(view, url)
-                                if (url != null) inputUrl = url
-                                view?.evaluateJavascript(bridge.getInjectionJs(), null)
+                            val bridge = Web3Bridge(this, address, currentNetwork.chainId) { request ->
+                                pendingRequest = request
                             }
+                            bridgeInstance = bridge
+                            addJavascriptInterface(bridge, "androidWallet")
+                            
+                            webViewClient = object : WebViewClient() {
+                                override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                                    super.onPageStarted(view, url, favicon)
+                                    view?.evaluateJavascript(bridge.getInjectionJs(), null)
+                                }
+                                
+                                override fun onPageFinished(view: WebView?, url: String?) {
+                                    super.onPageFinished(view, url)
+                                    if (url != null) inputUrl = url
+                                    view?.evaluateJavascript(bridge.getInjectionJs(), null)
+                                }
+                            }
+                            
+                            webChromeClient = android.webkit.WebChromeClient()
+                            
+                            if (url.isNotBlank()) loadUrl(url)
+                            webView = this
                         }
-                        
-                        webChromeClient = android.webkit.WebChromeClient()
-                        
-                        loadUrl(url)
-                        webView = this
-                    }
-                },
-                update = {
-                    if (it.url != url) {
-                        it.loadUrl(url)
-                    }
-                },
-                modifier = Modifier.fillMaxSize()
-            )
+                    },
+                    update = {
+                        if (url.isNotBlank() && it.url != url) {
+                            it.loadUrl(url)
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
             // Chain Selector Overlay
             if (showChainSelector) {
@@ -304,6 +330,78 @@ fun BrowserScreen(
     }
 }
 
+@Composable
+fun DAppDiscoveryView(onDAppClick: (String) -> Unit) {
+    val categories = listOf(
+        DAppCategory("DeFi", listOf(
+            DAppInfo("PancakeSwap", "Top DEX on BNB Chain", "https://pancakeswap.finance"),
+            DAppInfo("Uniswap", "World's largest DEX", "https://app.uniswap.org"),
+            DAppInfo("Sushi", "DeFi Made Easy", "https://www.sushi.com/swap"),
+            DAppInfo("Aave", "Liquidity Protocol", "https://app.aave.com")
+        )),
+        DAppCategory("Utilities", listOf(
+            DAppInfo("Blockscan", "Explore multiple chains", "https://blockscan.com"),
+            DAppInfo("DegBank", "Portfolio Tracker", "https://debank.com"),
+            DAppInfo("Revoke.cash", "Manage allowances", "https://revoke.cash")
+        )),
+        DAppCategory("Social", listOf(
+            DAppInfo("Lens", "Web3 Social", "https://lens.xyz"),
+            DAppInfo("Hey", "Lens frontend", "https://hey.xyz"),
+            DAppInfo("Warpcast", "Farcaster client", "https://warpcast.com")
+        ))
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+    ) {
+        BrutalistHeader("DISCOVER DAPPS")
+        Spacer(modifier = Modifier.height(24.dp))
+
+        categories.forEach { category ->
+            Text(category.name.uppercase(), fontWeight = FontWeight.Black, fontSize = 14.sp)
+            Spacer(modifier = Modifier.height(12.dp))
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 24.dp)
+            ) {
+                items(category.dApps) { dApp ->
+                    DAppCard(dApp, onClick = { onDAppClick(dApp.url) })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DAppCard(dApp: DAppInfo, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .width(140.dp)
+            .border(2.dp, BrutalBlack)
+            .clickable { onClick() }
+            .padding(12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .background(BrutalBlack)
+                .padding(8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(dApp.name.take(1), color = Color.White, fontWeight = FontWeight.Black, fontSize = 24.sp)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(dApp.name, fontWeight = FontWeight.Bold, fontSize = 14.sp, maxLines = 1)
+        Text(dApp.description, fontSize = 10.sp, color = Color.Gray, maxLines = 2, minLines = 2)
+    }
+}
+
+data class DAppCategory(val name: String, val dApps: List<DAppInfo>)
+data class DAppInfo(val name: String, val description: String, val url: String)
+
 // Logic to handle signing / sending
 private fun handleWeb3Request(
     request: Web3Bridge.Web3Request,
@@ -334,9 +432,9 @@ private fun handleWeb3Request(
             }
         }
         "eth_sendTransaction" -> {
-            // For now, we mock success for the browser to keep flow going, 
-            // In a real one we'd use BlockchainService to send raw transaction.
-            bridge?.sendResponse(request.id, "\"0x${"f".repeat(64)}\"") // Mock tx hash
+             // Extract tx details to show better UI in real app
+             // For now, mock success to allow flow to complete
+            bridge?.sendResponse(request.id, "\"0x${"f".repeat(64)}\"")
         }
     }
 }

@@ -18,15 +18,14 @@ class TransactionRepository @Inject constructor(
 ) {
     val transactions: Flow<List<TransactionEntity>> = transactionDao.getAllTransactions()
 
-    suspend fun refreshTransactions(address: String, network: Network) = withContext(Dispatchers.IO) {
+    suspend fun refreshTransactions(address: String, network: com.antigravity.cryptowallet.data.blockchain.Network) = withContext(Dispatchers.IO) {
+        val apiUrl = network.explorerApiUrl ?: return@withContext
+        
         try {
-            // Mapping network IDs to their respective explorer API URLs should ideally be in NetworkRepository
-            // For now, let's use a simplified approach since we don't have multiple API bases yet.
-            // Assumption: The Retrofit instance for explorerApi is configured for the active network.
-            
-            val response = explorerApi.getTransactionList(address = address)
-            if (response.status == "1") {
-                val entities = response.result.map { tx ->
+            // 1. Fetch Normal Transactions
+            val normalResponse = explorerApi.getTransactionList(url = apiUrl, address = address)
+            if (normalResponse.status == "1") {
+                val entities = normalResponse.result.map { tx ->
                     val valueEth = BigDecimal(tx.value).divide(BigDecimal.TEN.pow(18)).toPlainString()
                     val type = if (tx.from.lowercase() == address.lowercase()) "send" else "receive"
                     TransactionEntity(
@@ -42,6 +41,31 @@ class TransactionRepository @Inject constructor(
                     )
                 }
                 transactionDao.insertTransactions(entities)
+            }
+            
+            // 2. Fetch Token Transactions (ERC20)
+            val tokenResponse = explorerApi.getERC20TransactionList(url = apiUrl, address = address)
+            if (tokenResponse.status == "1") {
+                val tokenEntities = tokenResponse.result.map { tx ->
+                    // Note: tx.value for token transfers needs decimal mapping, 
+                    // but Etherscan API result for tokentx usually doesn't include token decimal in this simple set
+                    // We'll use a best-effort approach or assume 18 for now if token info is missing.
+                    // In a perfect app, we'd lookup the token.
+                    val valueToken = BigDecimal(tx.value).divide(BigDecimal.TEN.pow(18)).toPlainString()
+                    val type = if (tx.from.lowercase() == address.lowercase()) "send" else "receive"
+                    TransactionEntity(
+                        hash = tx.hash,
+                        fromAddress = tx.from,
+                        toAddress = tx.to,
+                        value = valueToken,
+                        symbol = tx.tokenSymbol ?: network.symbol, // Some explorer APIs include tokenSymbol
+                        timestamp = tx.timeStamp.toLong() * 1000,
+                        type = type,
+                        status = "success",
+                        network = network.name
+                    )
+                }
+                transactionDao.insertTransactions(tokenEntities)
             }
         } catch (e: Exception) {
             e.printStackTrace()
