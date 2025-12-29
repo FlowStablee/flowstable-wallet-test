@@ -62,7 +62,7 @@ class AssetRepository @Inject constructor(
 
         // 3. Fetch Native & Token Balances in Parallel
         val allNetworks = networkRepository.networks
-        val resultList = java.util.Collections.synchronizedList(mutableListOf<AssetUiModel>())
+        val resultList: MutableList<AssetUiModel> = java.util.Collections.synchronizedList(mutableListOf<AssetUiModel>())
 
         coroutineScope {
             // Native Balances

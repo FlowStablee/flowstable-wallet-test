@@ -8,7 +8,7 @@ import retrofit2.http.Url
 interface ExplorerApi {
     @GET
     suspend fun getTransactionList(
-        @retrofit2.http.Url url: String,
+        @Url url: String,
         @Query("module") module: String = "account",
         @Query("action") action: String = "txlist",
         @Query("address") address: String,
@@ -22,7 +22,7 @@ interface ExplorerApi {
 
     @GET
     suspend fun getERC20TransactionList(
-        @retrofit2.http.Url url: String,
+        @Url url: String,
         @Query("module") module: String = "account",
         @Query("action") action: String = "tokentx",
         @Query("contractaddress") contractaddress: String? = null,
