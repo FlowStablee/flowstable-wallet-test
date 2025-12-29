@@ -19,11 +19,11 @@ class NetworkRepository @Inject constructor() {
     private val infuraKey = "2e73eb0da821430d818d929e16963fc3"
     
     val networks = listOf(
-        Network("eth", "Ethereum", "https://mainnet.infura.io/v3/$infuraKey", "https://mainnet.infura.io/v3/$infuraKey", 1, "ETH", "ethereum"),
-        Network("arb", "Arbitrum One", "https://arbitrum-mainnet.infura.io/v3/$infuraKey", "https://arbitrum-mainnet.infura.io/v3/$infuraKey", 42161, "ETH", "ethereum"),
-        Network("op", "Optimism", "https://optimism-mainnet.infura.io/v3/$infuraKey", "https://optimism-mainnet.infura.io/v3/$infuraKey", 10, "ETH", "ethereum"),
-        Network("matic", "Polygon", "https://polygon-mainnet.infura.io/v3/$infuraKey", "https://polygon-mainnet.infura.io/v3/$infuraKey", 137, "POL", "matic-network"),
-        Network("bsc", "BNB Chain", "https://bsc-dataseed.binance.org", "https://bsc-dataseed.binance.org", 56, "BNB", "binancecoin")
+        Network("eth", "Ethereum", "https://mainnet.infura.io/v3/${infuraKey}", "https://mainnet.infura.io/v3/${infuraKey}", 1, "ETH", "ethereum"),
+        Network("arb", "Arbitrum One", "https://arbitrum-mainnet.infura.io/v3/${infuraKey}", "https://arbitrum-mainnet.infura.io/v3/${infuraKey}", 42161, "ETH", "ethereum"),
+        Network("op", "Optimism", "https://optimism-mainnet.infura.io/v3/${infuraKey}", "https://optimism-mainnet.infura.io/v3/${infuraKey}", 10, "ETH", "ethereum"),
+        Network("matic", "Polygon", "https://polygon-mainnet.infura.io/v3/${infuraKey}", "https://polygon-mainnet.infura.io/v3/${infuraKey}", 137, "POL", "polygon"),
+        Network("bsc", "BNB Chain", "https://bsc-dataseed.binance.org", "https://bsc-dataseed.binance.org", 56, "BNB", "binance-coin")
     )
     
     fun getNetwork(id: String) = networks.find { it.id == id } ?: networks.first()

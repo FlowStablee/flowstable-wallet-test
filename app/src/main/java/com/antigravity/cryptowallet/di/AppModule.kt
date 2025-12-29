@@ -65,7 +65,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoinGeckoApi(): CoinGeckoApi {
+    fun provideCoinCapApi(): CoinCapApi {
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
@@ -73,11 +73,11 @@ object AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://api.coingecko.com/api/v3/")
+            .baseUrl("https://api.coincap.io/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(CoinGeckoApi::class.java)
+            .create(CoinCapApi::class.java)
     }
 
     @Provides
