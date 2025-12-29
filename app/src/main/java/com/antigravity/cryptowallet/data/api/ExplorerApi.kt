@@ -3,6 +3,7 @@ package com.antigravity.cryptowallet.data.api
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface ExplorerApi {
     @GET

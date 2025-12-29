@@ -86,6 +86,7 @@ class Web3Bridge(
         val params = obj.optString("params", "[]")
         
         webView.post {
+            when (method) {
                 "eth_requestAccounts", "eth_accounts" -> {
                     sendResponse(id, "[\"$address\"]")
                 }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -210,16 +211,17 @@ fun WalletScreen(
                             }
                         )
 
-                        Spacer(modifier = Modifier.height(24.dp))
-
+                        val scope = rememberCoroutineScope()
                         BrutalistButton(
                             text = if(isSending) "Sending..." else "Send", 
                             onClick = { 
                                 if (inputAddress.isNotEmpty() && inputAmount.isNotEmpty() && selectedAsset != null) {
                                     isSending = true
-                                    viewModel.sendAsset(selectedAsset!!, inputAddress, inputAmount)
-                                    // Close after a bit or on success. For now simple:
-                                    showSendDialog = false
+                                    scope.launch {
+                                        viewModel.sendAsset(selectedAsset!!, inputAddress, inputAmount)
+                                        showSendDialog = false
+                                        isSending = false
+                                    }
                                 }
                             },
                             enabled = !isSending

@@ -7,6 +7,11 @@ import com.antigravity.cryptowallet.data.blockchain.NetworkRepository
 import com.antigravity.cryptowallet.data.db.TokenDao
 import com.antigravity.cryptowallet.data.db.TokenEntity
 import com.antigravity.cryptowallet.data.models.AssetUiModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -54,8 +59,6 @@ class AssetRepository @Inject constructor(
         }
         val prices = coinCapData.associate { it.id to (it.priceUsd?.toDouble() ?: 0.0) }
         val priceChanges = coinCapData.associate { it.id to (it.changePercent24h?.toDouble() ?: 0.0) }
-
-        val resultList = mutableListOf<AssetUiModel>()
 
         // 3. Fetch Native & Token Balances in Parallel
         val allNetworks = networkRepository.networks
