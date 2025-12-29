@@ -1,0 +1,815 @@
+
+build_error_6.txt:154
+:build	Setup Gradle	2
+025-12-28T17:59:17.31
+27406Z 
+##[warning]Failed to 
+restore v8-gradle|Lin
+ux|android build-buil
+d[37a6259cc0c1dae299a
+7866489dff0bd]-f89fe8
+9e3ec0d574477a65106c0
+87068c72b7a18: 
+Error: Cache service 
+responded with 400
+build_error_6.txt:158
+:build	Setup Gradle	2
+025-12-28T17:59:17.62
+46205Z 
+##[warning]Restore 
+Gradle distribution 
+8.4 failed: Error: 
+Cache service 
+responded with 400
+build_error_6.txt:162
+:build	Setup Gradle	2
+025-12-28T17:59:18.75
+14150Z 
+##[warning]Save 
+Gradle distribution 
+8.4 failed: Error: 
+<h2>Our services 
+aren't available 
+right 
+now</h2><p>We're 
+working to restore 
+all services as soon 
+as possible. Please 
+check back soon.</p>0
+9m9RaQAAAABo2TFPpODlS
+rv6jFKR8pf+UEhYMzFFRE
+dFMDUwOQBFZGdl
+build_error_6.txt:510
+:build	Build Debug 
+APK	2025-12-28T18:00:
+21.7777839Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_annotations
+/2.3.1/error_prone_an
+notations-2.3.1.pom]
+build_error_6.txt:511
+:build	Build Debug 
+APK	2025-12-28T18:00:
+21.7779359Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_a
+nnotations/2.3.1/erro
+r_prone_annotations-2
+.3.1.pom to /home/run
+ner/.gradle/.tmp/grad
+le_download9995270352
+777146205bin
+build_error_6.txt:522
+:build	Build Debug 
+APK	2025-12-28T18:00:
+22.3777335Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_parent/2.3.
+1/error_prone_parent-
+2.3.1.pom]
+build_error_6.txt:523
+:build	Build Debug 
+APK	2025-12-28T18:00:
+22.4778235Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_p
+arent/2.3.1/error_pro
+ne_parent-2.3.1.pom 
+to /home/runner/.grad
+le/.tmp/gradle_downlo
+ad1777322476075935530
+1bin
+build_error_6.txt:526
+:build	Build Debug 
+APK	2025-12-28T18:00:
+24.0778460Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_annotations
+/2.5.1/error_prone_an
+notations-2.5.1.pom]
+build_error_6.txt:527
+:build	Build Debug 
+APK	2025-12-28T18:00:
+24.1778416Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_a
+nnotations/2.5.1/erro
+r_prone_annotations-2
+.5.1.pom to /home/run
+ner/.gradle/.tmp/grad
+le_download4645914899
+589830613bin
+build_error_6.txt:528
+:build	Build Debug 
+APK	2025-12-28T18:00:
+24.3777563Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_parent/2.5.
+1/error_prone_parent-
+2.5.1.pom]
+build_error_6.txt:529
+:build	Build Debug 
+APK	2025-12-28T18:00:
+24.4778161Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_p
+arent/2.5.1/error_pro
+ne_parent-2.5.1.pom 
+to /home/runner/.grad
+le/.tmp/gradle_downlo
+ad55339641682451131bi
+n
+build_error_6.txt:534
+:build	Build Debug 
+APK	2025-12-28T18:00:
+25.8778415Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_annotations
+/2.10.0/error_prone_a
+nnotations-2.10.0.pom
+]
+build_error_6.txt:535
+:build	Build Debug 
+APK	2025-12-28T18:00:
+25.8780431Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_a
+nnotations/2.10.0/err
+or_prone_annotations-
+2.10.0.pom to /home/r
+unner/.gradle/.tmp/gr
+adle_download92180325
+7605217042bin
+build_error_6.txt:536
+:build	Build Debug 
+APK	2025-12-28T18:00:
+26.5777725Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_parent/2.10
+.0/error_prone_parent
+-2.10.0.pom]
+build_error_6.txt:537
+:build	Build Debug 
+APK	2025-12-28T18:00:
+26.5779731Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_p
+arent/2.10.0/error_pr
+one_parent-2.10.0.pom
+ to /home/runner/.gra
+dle/.tmp/gradle_downl
+oad102560663939841438
+07bin
+build_error_6.txt:606
+:build	Build Debug 
+APK	2025-12-28T18:00:
+36.5777926Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_annotations
+/2.11.0/error_prone_a
+nnotations-2.11.0.pom
+]
+build_error_6.txt:607
+:build	Build Debug 
+APK	2025-12-28T18:00:
+36.5779507Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_a
+nnotations/2.11.0/err
+or_prone_annotations-
+2.11.0.pom to /home/r
+unner/.gradle/.tmp/gr
+adle_download16076858
+438786855714bin
+build_error_6.txt:608
+:build	Build Debug 
+APK	2025-12-28T18:00:
+36.8777828Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_parent/2.11
+.0/error_prone_parent
+-2.11.0.pom]
+build_error_6.txt:609
+:build	Build Debug 
+APK	2025-12-28T18:00:
+36.8780393Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_p
+arent/2.11.0/error_pr
+one_parent-2.11.0.pom
+ to /home/runner/.gra
+dle/.tmp/gradle_downl
+oad114026131895759548
+50bin
+build_error_6.txt:765
+:build	Build Debug 
+APK	2025-12-28T18:00:
+48.2792367Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_a
+nnotations/2.11.0/err
+or_prone_annotations-
+2.11.0.jar to /home/r
+unner/.gradle/.tmp/gr
+adle_download10354559
+173391375457bin
+build_error_6.txt:835
+:build	Build Debug 
+APK	2025-12-28T18:01:
+10.1789766Z Tasks to 
+be executed: [task 
+':app:preBuild', 
+task ':app:preDebugBu
+ild', task ':app:merg
+eDebugNativeDebugMeta
+data', task ':app:che
+ckKotlinGradlePluginC
+onfigurationErrors', 
+task ':app:generateDe
+bugBuildConfig', 
+task ':app:checkDebug
+AarMetadata', task ':
+app:generateDebugResV
+alues', task ':app:ma
+pDebugSourceSetPaths'
+, task ':app:generate
+DebugResources', 
+task ':app:mergeDebug
+Resources', task ':ap
+p:packageDebugResourc
+es', task ':app:parse
+DebugLocalResources',
+ task ':app:createDeb
+ugCompatibleScreenMan
+ifests', task ':app:e
+xtractDeepLinksDebug'
+, task ':app:processD
+ebugMainManifest', 
+task ':app:processDeb
+ugManifest', task ':a
+pp:processDebugManife
+stForPackage', task '
+:app:processDebugReso
+urces', task ':app:ks
+pDebugKotlin', task '
+:app:kaptGenerateStub
+sDebugKotlin', task '
+:app:kaptDebugKotlin'
+, task ':app:compileD
+ebugKotlin', task ':a
+pp:javaPreCompileDebu
+g', task ':app:compil
+eDebugJavaWithJavac',
+ task ':app:mergeDebu
+gShaders', task ':app
+:compileDebugShaders'
+, task ':app:generate
+DebugAssets', task ':
+app:mergeDebugAssets'
+, task ':app:compress
+DebugAssets', task ':
+app:desugarDebugFileD
+ependencies', task ':
+app:hiltAggregateDeps
+Debug', task ':app:hi
+ltJavaCompileDebug', 
+task ':app:transformD
+ebugClassesWithAsm', 
+task ':app:dexBuilder
+Debug', task ':app:me
+rgeDebugGlobalSynthet
+ics', task ':app:proc
+essDebugJavaRes', 
+task ':app:mergeDebug
+JavaResource', task '
+:app:checkDebugDuplic
+ateClasses', task ':a
+pp:mergeExtDexDebug',
+ task ':app:mergeLibD
+exDebug', task ':app:
+mergeProjectDexDebug'
+, task ':app:mergeDeb
+ugJniLibFolders', 
+task ':app:mergeDebug
+NativeLibs', task ':a
+pp:stripDebugDebugSym
+bols', task ':app:val
+idateSigningDebug', 
+task ':app:writeDebug
+AppMetadata', task ':
+app:writeDebugSigning
+ConfigVersions', 
+task 
+':app:packageDebug', 
+task ':app:createDebu
+gApkListingFileRedire
+ct', task 
+':app:assembleDebug']
+build_error_6.txt:852
+:build	Build Debug 
+APK	2025-12-28T18:01:
+10.2802318Z Resolve 
+mutations for :app:ch
+eckKotlinGradlePlugin
+ConfigurationErrors 
+(Thread[Execution 
+worker,5,main]) 
+started.
+build_error_6.txt:853
+:build	Build Debug 
+APK	2025-12-28T18:01:
+10.2803007Z :app:chec
+kKotlinGradlePluginCo
+nfigurationErrors 
+(Thread[Execution 
+worker,5,main]) 
+started.
+build_error_6.txt:855
+:build	Build Debug 
+APK	2025-12-28T18:01:
+10.2803491Z > Task :a
+pp:checkKotlinGradleP
+luginConfigurationErr
+ors
+build_error_6.txt:856
+:build	Build Debug 
+APK	2025-12-28T18:01:
+10.2803930Z Caching 
+disabled for task ':a
+pp:checkKotlinGradleP
+luginConfigurationErr
+ors' because:
+build_error_6.txt:858
+:build	Build Debug 
+APK	2025-12-28T18:01:
+10.2805139Z Task ':ap
+p:checkKotlinGradlePl
+uginConfigurationErro
+rs' is not 
+up-to-date because:
+build_error_6.txt:533
+0:build	Build Debug 
+APK	2025-12-28T18:02:
+56.4929060Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_annotations
+/2.7.1/error_prone_an
+notations-2.7.1.pom]
+build_error_6.txt:533
+1:build	Build Debug 
+APK	2025-12-28T18:02:
+56.4931196Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_a
+nnotations/2.7.1/erro
+r_prone_annotations-2
+.7.1.pom to /home/run
+ner/.gradle/.tmp/grad
+le_download5052477301
+308054318bin
+build_error_6.txt:533
+2:build	Build Debug 
+APK	2025-12-28T18:02:
+56.4933414Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/er
+ror_prone_parent/2.7.
+1/error_prone_parent-
+2.7.1.pom]
+build_error_6.txt:533
+3:build	Build Debug 
+APK	2025-12-28T18:02:
+56.4935339Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/error_prone_p
+arent/2.7.1/error_pro
+ne_parent-2.7.1.pom 
+to /home/runner/.grad
+le/.tmp/gradle_downlo
+ad2435199663402468994
+bin
+build_error_6.txt:535
+0:build	Build Debug 
+APK	2025-12-28T18:02:
+56.4982459Z Resource 
+missing. [HTTP GET: h
+ttps://dl.google.com/
+dl/android/maven2/com
+/google/errorprone/ja
+vac-shaded/9-dev-r402
+3-3/javac-shaded-9-de
+v-r4023-3.pom]
+build_error_6.txt:535
+1:build	Build Debug 
+APK	2025-12-28T18:02:
+56.4985252Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/javac-shaded/
+9-dev-r4023-3/javac-s
+haded-9-dev-r4023-3.p
+om to /home/runner/.g
+radle/.tmp/gradle_dow
+nload6399354310701251
+483bin
+build_error_6.txt:536
+9:build	Build Debug 
+APK	2025-12-28T18:02:
+56.5032486Z 
+Downloading https://r
+epo.maven.apache.org/
+maven2/com/google/err
+orprone/javac-shaded/
+9-dev-r4023-3/javac-s
+haded-9-dev-r4023-3.j
+ar to /home/runner/.g
+radle/.tmp/gradle_dow
+nload1401876987916981
+9012bin
+build_error_6.txt:114
+98:build	Build Debug 
+APK	2025-12-28T18:04:
+32.4541126Z 
+Compiling xml file /h
+ome/runner/.gradle/ca
+ches/transforms-3/c46
+7de5e46e9418a2201c377
+af044ae6/transformed/
+biometric-1.2.0-alpha
+05/res/color-v26/biom
+etric_error_color.xml
+ to /home/runner/.gra
+dle/caches/transforms
+-3/54331f9908402e781e
+26e110c0000e9d/transf
+ormed/androidx.biomet
+ric/color-v26_biometr
+ic_error_color.xml.fl
+at
+build_error_6.txt:115
+19:build	Build Debug 
+APK	2025-12-28T18:04:
+32.4604353Z 
+Compiling xml file /h
+ome/runner/.gradle/ca
+ches/transforms-3/c46
+7de5e46e9418a2201c377
+af044ae6/transformed/
+biometric-1.2.0-alpha
+05/res/drawable-anydp
+i-v24/fingerprint_dia
+log_error.xml to /hom
+e/runner/.gradle/cach
+es/transforms-3/54331
+f9908402e781e26e110c0
+000e9d/transformed/an
+droidx.biometric/draw
+able-anydpi-v24_finge
+rprint_dialog_error.x
+ml.flat
+build_error_6.txt:142
+73:build	Build Debug 
+APK	2025-12-28T18:04:
+53.4855665Z 
+Transforming error_pr
+one_annotations-2.11.
+0.jar (com.google.err
+orprone:error_prone_a
+nnotations:2.11.0) 
+with JetifyTransform
+build_error_6.txt:142
+78:build	Build Debug 
+APK	2025-12-28T18:04:
+53.4861039Z 
+Transforming javac-sh
+aded-9-dev-r4023-3.ja
+r (com.google.errorpr
+one:javac-shaded:9-de
+v-r4023-3) with 
+JetifyTransform
+build_error_6.txt:143
+56:build	Build Debug 
+APK	2025-12-28T18:04:
+53.5023476Z Build 
+cache key for 
+JetifyTransform: /hom
+e/runner/.gradle/cach
+es/modules-2/files-2.
+1/com.google.errorpro
+ne/error_prone_annota
+tions/2.11.0/c5a0ace6
+96d3f8b1c1d8cc036d8c0
+3cc0cbe6b69/error_pro
+ne_annotations-2.11.0
+.jar is 65102d945bbdf
+aafb5d6f320d78a62ee
+build_error_6.txt:143
+57:build	Build Debug 
+APK	2025-12-28T18:04:
+53.5026147Z 
+JetifyTransform: /hom
+e/runner/.gradle/cach
+es/modules-2/files-2.
+1/com.google.errorpro
+ne/error_prone_annota
+tions/2.11.0/c5a0ace6
+96d3f8b1c1d8cc036d8c0
+3cc0cbe6b69/error_pro
+ne_annotations-2.11.0
+.jar is not 
+up-to-date because:
+build_error_6.txt:143
+59:build	Build Debug 
+APK	2025-12-28T18:04:
+53.5029262Z Stored 
+cache entry for 
+JetifyTransform: /hom
+e/runner/.gradle/cach
+es/modules-2/files-2.
+1/com.google.errorpro
+ne/error_prone_annota
+tions/2.11.0/c5a0ace6
+96d3f8b1c1d8cc036d8c0
+3cc0cbe6b69/error_pro
+ne_annotations-2.11.0
+.jar with cache key 6
+5102d945bbdfaafb5d6f3
+20d78a62ee
+build_error_6.txt:143
+76:build	Build Debug 
+APK	2025-12-28T18:04:
+53.5064488Z Build 
+cache key for 
+JetifyTransform: /hom
+e/runner/.gradle/cach
+es/modules-2/files-2.
+1/com.google.errorpro
+ne/javac-shaded/9-dev
+-r4023-3/72b688efd290
+280a0afde5f9892b0fde6
+f362d1d/javac-shaded-
+9-dev-r4023-3.jar is 
+0ae82562376344cb9416e
+5d0d92c1328
+build_error_6.txt:143
+77:build	Build Debug 
+APK	2025-12-28T18:04:
+53.5067035Z 
+JetifyTransform: /hom
+e/runner/.gradle/cach
+es/modules-2/files-2.
+1/com.google.errorpro
+ne/javac-shaded/9-dev
+-r4023-3/72b688efd290
+280a0afde5f9892b0fde6
+f362d1d/javac-shaded-
+9-dev-r4023-3.jar is 
+not up-to-date 
+because:
+build_error_6.txt:143
+81:build	Build Debug 
+APK	2025-12-28T18:04:
+53.5075214Z Stored 
+cache entry for 
+JetifyTransform: /hom
+e/runner/.gradle/cach
+es/modules-2/files-2.
+1/com.google.errorpro
+ne/javac-shaded/9-dev
+-r4023-3/72b688efd290
+280a0afde5f9892b0fde6
+f362d1d/javac-shaded-
+9-dev-r4023-3.jar 
+with cache key 0ae825
+62376344cb9416e5d0d92
+c1328
+build_error_6.txt:149
+79:build	Build Debug 
+APK	2025-12-28T18:05:
+09.7857228Z    > 
+Compilation error. 
+See log for more 
+details
+build_error_6.txt:151
+51:build	Build Debug 
+APK	2025-12-28T18:05:
+09.8095392Z Caused 
+by: org.jetbrains.kot
+lin.gradle.tasks.Comp
+ilationErrorException
+: Compilation error. 
+See log for more 
+details
+build_error_6.txt:151
+86:build	Build Debug 
+APK	2025-12-28T18:05:
+10.3321076Z 
+##[error]Process 
+completed with exit 
+code 1.
+build_error_6.txt:151
+98:build	Post Setup 
+Gradle	2025-12-28T18:
+05:11.4775944Z 
+##[warning]Failed to 
+save cache entry 
+with path '/home/runn
+er/.gradle/caches/8.4
+/generated-gradle-jar
+s/gradle-kotlin-dsl-e
+xtensions-8.4.jar,zst
+d-without-long,1.0' 
+and key: generated-gr
+adle-jars-d75b4744b9d
+265c82f2e8033a6ad7da2
+: Error: <h2>Our 
+services aren't 
+available right 
+now</h2><p>We're 
+working to restore 
+all services as soon 
+as possible. Please 
+check back soon.</p>0
+V3FRaQAAAADchJG1iI5BT
+6i3a0vzK3RhUEhYMzFFRE
+dFMDUwOQBFZGdl
+build_error_6.txt:151
+99:build	Post Setup 
+Gradle	2025-12-28T18:
+05:11.8411413Z 
+##[warning]Failed to 
+save cache entry 
+with path '/home/runn
+er/.gradle/caches/8.4
+/generated-gradle-jar
+s/gradle-api-8.4.jar,
+zstd-without-long,1.0
+' and key: generated-
+gradle-jars-1a83665c4
+81822ee3817bdf1f75747
+ae: Error: <h2>Our 
+services aren't 
+available right 
+now</h2><p>We're 
+working to restore 
+all services as soon 
+as possible. Please 
+check back soon.</p>0
+V3FRaQAAAABx3YU2xxCdQ
+ZSlRiEn0YN4UEhYMzFFRE
+dFMDUwOQBFZGdl
+build_error_6.txt:152
+05:build	Post Setup 
+Gradle	2025-12-28T18:
+05:12.1098730Z 
+##[warning]Failed to 
+save cache entry 
+with path '/home/runn
+er/.gradle/caches/*/k
+otlin-dsl/*/*,zstd-wi
+thout-long,1.0' and 
+key: kotlin-dsl-5a922
+57ef0433c709023cc017c
+c03bab: Error: 
+<h2>Our services 
+aren't available 
+right 
+now</h2><p>We're 
+working to restore 
+all services as soon 
+as possible. Please 
+check back soon.</p>0
+WHFRaQAAAADpUPa98GieQ
+6AQUUMAnLVXUEhYMzFFRE
+dFMDUwOQBFZGdl
+build_error_6.txt:152
+07:build	Post Setup 
+Gradle	2025-12-28T18:
+05:13.4465747Z 
+##[warning]Failed to 
+save cache entry 
+with path '/home/runn
+er/.gradle/caches/jar
+s-*/*,zstd-without-lo
+ng,1.0' and key: inst
+rumented-jars-b8ec058
+5c8c43c6f1e03d5913d7a
+9e48: Error: <h2>Our 
+services aren't 
+available right 
+now</h2><p>We're 
+working to restore 
+all services as soon 
+as possible. Please 
+check back soon.</p>0
+WXFRaQAAAAAAEiWXaJZhR
+o9yvmGXr39yUEhYMzFFRE
+dFMDUwOQBFZGdl
+build_error_6.txt:152
+08:build	Post Setup 
+Gradle	2025-12-28T18:
+05:13.7462594Z 
+##[warning]Failed to 
+save cache entry 
+with path '/home/runn
+er/.gradle/caches/mod
+ules-*/files-*/*/*/*/
+*,zstd-without-long,1
+.0' and key: dependen
+cies-20b338fd59833b3d
+1c90482d8ff6d00f: 
+Error: <h2>Our 
+services aren't 
+available right 
+now</h2><p>We're 
+working to restore 
+all services as soon 
+as possible. Please 
+check back soon.</p>0
+WXFRaQAAAACBm7EvvYNCQ
+4i3mzUl8xRkUEhYMzFFRE
+dFMDUwOQBFZGdl
+build_error_6.txt:152
+11:build	Post Setup 
+Gradle	2025-12-28T18:
+05:15.4557734Z 
+##[warning]Failed to 
+save cache entry 
+with path '/home/runn
+er/.gradle/caches,/ho
+me/runner/.gradle/not
+ifications,/home/runn
+er/.gradle/.gradle-bu
+ild-action,zstd-witho
+ut-long,1.0' and 
+key: v8-gradle|Linux|
+android build-build[3
+7a6259cc0c1dae299a786
+6489dff0bd]-f89fe89e3
+ec0d574477a65106c0870
+68c72b7a18: Error: 
+<h2>Our services 
+aren't available 
+right 
+now</h2><p>We're 
+working to restore 
+all services as soon 
+as possible. Please 
+check back soon.</p>0
+W3FRaQAAAAB8HYDCPTS2T
+YZ8O8Mepgs6UEhYMzFFRE
+dFMDUwOQBFZGdl
+
+

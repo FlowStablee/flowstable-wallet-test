@@ -107,7 +107,7 @@ class WalletViewModel @Inject constructor(
             launch {
                 assetRepository.assets.collect { assetList ->
                     assets = assetList
-                    val total = assetList.sumByDouble { it.rawBalance * it.price }
+                    val total = assetList.sumOf { it.rawBalance * it.price }
                     totalBalanceUsd = String.format("$%.2f", total)
                 }
             }
