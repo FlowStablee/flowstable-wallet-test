@@ -36,3 +36,9 @@ captures/
 .cxx/
 *.ninja
 *.hprof
+
+# Build Logs & Temp Files
+build_error*.txt
+build_log.txt
+readable_errors.txt
+unresolved_references.txt

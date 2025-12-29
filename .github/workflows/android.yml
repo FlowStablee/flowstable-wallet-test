@@ -37,12 +37,23 @@ jobs:
         name: FlowStable-Wallet-Artifact
         path: FlowStable-Wallet-Latest.apk
 
+    - name: Upload Logs on Failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs
+        path: |
+          app/build/reports/
+          app/build/test-results/
+          **/build_log.txt
+          **/build_error*.txt
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       with:
-        tag_name: latest
-        name: Latest Continuous Build
+        tag_name: v${{ github.run_number }}
+        name: Build ${{ github.run_number }}
         files: FlowStable-Wallet-Latest.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
