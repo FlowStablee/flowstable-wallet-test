@@ -58,9 +58,9 @@ fun LockScreen(
     }
 
     // Biometric Trigger
-    LaunchedEffect(Unit) {
+    LaunchedEffect(biometricEnabled) {
         if (mode == LockMode.UNLOCK && biometricEnabled) {
-             val fragmentActivity = context.findFragmentActivity()
+             val fragmentActivity = (context as? FragmentActivity) ?: context.findFragmentActivity()
              if (fragmentActivity != null) {
                  val executor = ContextCompat.getMainExecutor(context)
                  val biometricPrompt = BiometricPrompt(fragmentActivity, executor,
@@ -69,15 +69,27 @@ fun LockScreen(
                             super.onAuthenticationSucceeded(result)
                             onUnlock()
                         }
+                        
+                        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                            super.onAuthenticationError(errorCode, errString)
+                            if (errorCode != BiometricPrompt.ERROR_NEGATIVE_BUTTON && errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
+                                error = errString.toString()
+                            }
+                        }
                     })
     
                 val promptInfo = BiometricPrompt.PromptInfo.Builder()
                     .setTitle("Unlock Wallet")
                     .setSubtitle("Use biometric credential")
                     .setNegativeButtonText("Use PIN")
+                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
                     .build()
     
-                biometricPrompt.authenticate(promptInfo)
+                try {
+                    biometricPrompt.authenticate(promptInfo)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
              }
         }
     }

@@ -41,10 +41,17 @@ fun WalletApp(startDestination: String = "intro") {
             )
         }
         composable("home") {
+            val securityViewModel = androidx.hilt.navigation.compose.hiltViewModel<com.antigravity.cryptowallet.ui.security.SecurityViewModel>()
             MainScreen(
                 onNavigateToSecuritySetup = { navController.navigate("security_setup") },
                 onNavigateToSeedReveal = { navController.navigate("seed_reveal") },
-                onNavigateToTokenDetail = { assetId -> navController.navigate("token_detail/$assetId") }
+                onNavigateToTokenDetail = { assetId -> navController.navigate("token_detail/$assetId") },
+                onLogout = {
+                    securityViewModel.logout()
+                    navController.navigate("intro") {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
             )
         }
         

@@ -29,7 +29,8 @@ import com.antigravity.cryptowallet.ui.history.HistoryScreen
 fun MainScreen(
     onNavigateToSecuritySetup: () -> Unit,
     onNavigateToSeedReveal: () -> Unit,
-    onNavigateToTokenDetail: (String) -> Unit
+    onNavigateToTokenDetail: (String) -> Unit,
+    onLogout: () -> Unit = {}
 ) {
     val navController = rememberNavController()
 
@@ -79,7 +80,8 @@ fun MainScreen(
             composable("settings") {
                 com.antigravity.cryptowallet.ui.settings.SettingsScreen(
                     onSetupSecurity = onNavigateToSecuritySetup,
-                    onViewSeedPhrase = onNavigateToSeedReveal
+                    onViewSeedPhrase = onNavigateToSeedReveal,
+                    onLogout = onLogout
                 )
             }
         }

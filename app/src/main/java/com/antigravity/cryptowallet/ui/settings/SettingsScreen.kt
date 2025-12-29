@@ -26,7 +26,8 @@ import com.antigravity.cryptowallet.ui.theme.BrutalWhite
 @Composable
 fun SettingsScreen(
     onSetupSecurity: () -> Unit,
-    onViewSeedPhrase: () -> Unit = {} // To be implemented
+    onViewSeedPhrase: () -> Unit = {},
+    onLogout: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -61,6 +62,13 @@ fun SettingsScreen(
                     icon = Icons.Default.Info,
                     onClick = { }
                 )
+                SettingsItem(
+                    title = "RESET WALLET",
+                    subtitle = "DANGEROUS: Clear all data",
+                    icon = Icons.Default.Refresh,
+                    onClick = onLogout,
+                    isDestructive = true
+                )
             }
         }
     }
@@ -82,25 +90,38 @@ fun SettingsItem(
     title: String,
     subtitle: String,
     icon: ImageVector,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isDestructive: Boolean = false
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, BrutalBlack)
+            .border(1.dp, if (isDestructive) Color.Red else BrutalBlack)
             .clickable { onClick() }
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(imageVector = icon, contentDescription = null, tint = BrutalBlack)
+            Icon(
+                imageVector = icon, 
+                contentDescription = null, 
+                tint = if (isDestructive) Color.Red else BrutalBlack
+            )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(text = title, fontWeight = FontWeight.Bold, color = BrutalBlack)
+                Text(
+                    text = title, 
+                    fontWeight = FontWeight.Bold, 
+                    color = if (isDestructive) Color.Red else BrutalBlack
+                )
                 Text(text = subtitle, fontSize = 12.sp, color = androidx.compose.ui.graphics.Color.Gray)
             }
         }
-        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = BrutalBlack)
+        Icon(
+            imageVector = Icons.Default.ChevronRight, 
+            contentDescription = null, 
+            tint = if (isDestructive) Color.Red else BrutalBlack
+        )
     }
 }

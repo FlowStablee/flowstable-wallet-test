@@ -10,32 +10,81 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.antigravity.cryptowallet.data.models.AssetUiModel
 import com.antigravity.cryptowallet.ui.components.BrutalistButton
 import com.antigravity.cryptowallet.ui.components.BrutalistHeader
+import com.antigravity.cryptowallet.ui.history.HistoryViewModel
 import com.antigravity.cryptowallet.ui.theme.BrutalBlack
 import com.antigravity.cryptowallet.ui.theme.BrutalWhite
+import com.antigravity.cryptowallet.utils.QrCodeGenerator
+import androidx.compose.foundation.Image
 
 @Composable
 fun TokenDetailScreen(
     assetId: String,
     onBack: () -> Unit,
-    viewModel: WalletViewModel = hiltViewModel()
+    viewModel: WalletViewModel = hiltViewModel(),
+    historyViewModel: HistoryViewModel = hiltViewModel()
 ) {
     val asset = viewModel.assets.find { it.id == assetId } ?: return
+    val transactions by historyViewModel.transactions.collectAsState()
+    val filteredTransactions = transactions.filter { it.symbol.uppercase() == asset.symbol.uppercase() }
+    
+    var showReceiveDialog by remember { mutableStateOf(false) }
     val clipboardManager = LocalClipboardManager.current
+
+    if (showReceiveDialog) {
+        Dialog(onDismissRequest = { showReceiveDialog = false }) {
+            Column(
+                modifier = Modifier
+                    .background(BrutalWhite)
+                    .border(2.dp, BrutalBlack)
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                BrutalistHeader("Receive ${asset.symbol}")
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                val qrBitmap = remember(viewModel.address) {
+                    QrCodeGenerator.generateQrCode(viewModel.address)
+                }
+                Image(
+                    bitmap = qrBitmap.asImageBitmap(),
+                    contentDescription = "Wallet Address QR Code",
+                    modifier = Modifier.size(200.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = viewModel.address,
+                    fontWeight = FontWeight.Bold,
+                    color = BrutalBlack,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.clickable {
+                        clipboardManager.setText(AnnotatedString(viewModel.address))
+                    }
+                )
+                Text("(Tap to copy)", fontSize = 12.sp, color = Color.Gray)
+                Spacer(modifier = Modifier.height(24.dp))
+                BrutalistButton(text = "Close", onClick = { showReceiveDialog = false })
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -137,20 +186,60 @@ fun TokenDetailScreen(
         Text("TRANSACTION HISTORY", fontWeight = FontWeight.Black, fontSize = 14.sp)
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Placeholder for Filtered History
-        // In a real implementation, we'd fetch transactions specifically for this asset/network
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .border(2.dp, BrutalBlack, shape = RoundedCornerShape(0.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "No recent transactions for ${asset.symbol}",
-                color = Color.Gray,
-                textAlign = TextAlign.Center
-            )
+        if (filteredTransactions.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .border(2.dp, BrutalBlack),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "No transactions found for ${asset.symbol}",
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .border(2.dp, BrutalBlack),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(filteredTransactions) { tx ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, BrutalBlack)
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(tx.type.uppercase(), fontWeight = FontWeight.Black, fontSize = 12.sp)
+                            Text(
+                                if (tx.type == "send") "To: ${tx.toAddress.take(6)}...${tx.toAddress.takeLast(4)}" 
+                                else "From: ${tx.fromAddress.take(6)}...${tx.fromAddress.takeLast(4)}",
+                                fontSize = 10.sp, color = Color.Gray
+                            )
+                        }
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(
+                                "${if (tx.type == "receive") "+" else "-"}${tx.value} ${tx.symbol}",
+                                fontWeight = FontWeight.Bold,
+                                color = if (tx.type == "receive") Color(0xFF00C853) else Color.Red
+                            )
+                            Text(
+                                java.text.SimpleDateFormat("MMM dd, HH:mm").format(java.util.Date(tx.timestamp)),
+                                fontSize = 10.sp, color = Color.Gray
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -162,12 +251,12 @@ fun TokenDetailScreen(
         ) {
             BrutalistButton(
                 text = "SEND",
-                onClick = { /* Navigate to Send with pre-selected asset */ },
+                onClick = { /* In a real app, we'd navigate to Send with state */ },
                 modifier = Modifier.weight(1f)
             )
             BrutalistButton(
                 text = "RECEIVE",
-                onClick = { /* Show Receive Dialog */ },
+                onClick = { showReceiveDialog = true },
                 modifier = Modifier.weight(1f),
                 inverted = true
             )

@@ -7,12 +7,10 @@ import com.antigravity.cryptowallet.data.blockchain.NetworkRepository
 import com.antigravity.cryptowallet.data.db.TokenDao
 import com.antigravity.cryptowallet.data.db.TokenEntity
 import com.antigravity.cryptowallet.data.models.AssetUiModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,70 +57,93 @@ class AssetRepository @Inject constructor(
 
         val resultList = mutableListOf<AssetUiModel>()
 
-        // 3. Fetch Native Balances (ETH, BNB, MATIC)
-        // For simplicity, we only show ETH, BNB, MATIC native defaults.
+        // 3. Fetch Native & Token Balances in Parallel
         val mainNetworks = listOf("eth", "bsc", "matic")
-        
-        for (netId in mainNetworks) {
-            val net = networkRepository.getNetwork(netId)
-            val balance = blockchainService.getBalance(net.rpcUrl, address)
-            val ethBalance = BigDecimal(balance).divide(BigDecimal.TEN.pow(18))
-            val price = prices[net.coingeckoId] ?: 0.0
-            val priceChange = priceChanges[net.coingeckoId] ?: 0.0
-            val balanceUsd = ethBalance.multiply(BigDecimal(price))
+        val resultList = java.util.Collections.synchronizedList(mutableListOf<AssetUiModel>())
 
-            resultList.add(
-                AssetUiModel(
-                    id = "native-${net.id}",
-                    symbol = net.symbol,
-                    name = net.name,
-                    balance = String.format("%.7f %s", ethBalance, net.symbol).trimEnd('0').trimEnd('.'),
-                    balanceUsd = String.format("$%.2f", balanceUsd),
-                    iconUrl = null,
-                    networkName = net.name,
-                    chainId = net.id,
-                    contractAddress = null,
-                    rawBalance = ethBalance.toDouble(),
-                    price = price,
-                    priceChange24h = priceChange
-                )
-            )
-        }
+        coroutineScope {
+            // Native Balances
+            val nativeJobs = mainNetworks.map { netId ->
+                async {
+                    try {
+                        val net = networkRepository.getNetwork(netId)
+                        val balance = blockchainService.getBalance(net.rpcUrl, address)
+                        val ethBalance = BigDecimal(balance).divide(BigDecimal.TEN.pow(18))
+                        val price = prices[net.coingeckoId] ?: 0.0
+                        val priceChange = priceChanges[net.coingeckoId] ?: 0.0
+                        val balanceUsd = ethBalance.multiply(BigDecimal(price))
 
-        // 4. Fetch Token Balances
-        for (token in allTokens) {
-            val net = networkRepository.getNetwork(token.chainId)
-            if (token.contractAddress != null) {
-                val balance = blockchainService.getTokenBalance(net.rpcUrl, token.contractAddress, address)
-                val tokenBalance = BigDecimal(balance).divide(BigDecimal.TEN.pow(token.decimals))
-                
-                val dexData = try {
-                    val dexResponse = dexscreenerApi.getTokenPairs(token.contractAddress)
-                    dexResponse.pairs?.maxByOrNull { it.volume?.h24 ?: 0.0 }
-                } catch (e: Exception) { null }
-                
-                val price = dexData?.priceUsd?.toDouble() ?: 0.0
-                val priceChange = dexData?.priceChange?.h24 ?: 0.0
-                
-                val balanceUsd = tokenBalance.multiply(BigDecimal(price))
-
-                resultList.add(
-                    AssetUiModel(
-                        id = "token-${token.id}",
-                        symbol = token.symbol,
-                        name = token.name,
-                        balance = String.format("%.7f %s", tokenBalance, token.symbol).trimEnd('0').trimEnd('.'),
-                        balanceUsd = String.format("$%.2f", balanceUsd),
-                        iconUrl = null,
-                        networkName = net.name,
-                        chainId = net.id,
-                        contractAddress = token.contractAddress,
-                        rawBalance = tokenBalance.toDouble(),
-                        price = price,
-                        priceChange24h = priceChange
-                    )
-                )
+                        resultList.add(
+                            AssetUiModel(
+                                id = "native-${net.id}",
+                                symbol = net.symbol,
+                                name = net.name,
+                                balance = String.format("%.7f %s", ethBalance, net.symbol).trimEnd('0').trimEnd('.'),
+                                balanceUsd = String.format("$%.2f", balanceUsd),
+                                iconUrl = null,
+                                networkName = net.name,
+                                chainId = net.id,
+                                contractAddress = null,
+                                rawBalance = ethBalance.toDouble(),
+                                price = price,
+                                priceChange24h = priceChange
+                            )
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
+
+            // Token Balances (Chunked to avoid overwhelming RPC)
+            val tokenJobs = allTokens.chunked(20).flatMap { chunk ->
+                chunk.map { token ->
+                    async {
+                        try {
+                            val net = networkRepository.getNetwork(token.chainId)
+                            val balance = blockchainService.getTokenBalance(net.rpcUrl, token.contractAddress!!, address)
+                            val tokenBalance = BigDecimal(balance).divide(BigDecimal.TEN.pow(token.decimals))
+                            
+                            // Only fetch DexScreener if balance > 0 to save bandwidth/API
+                            var price = 0.0
+                            var priceChange = 0.0
+                            
+                            if (tokenBalance > BigDecimal.ZERO) {
+                                try {
+                                    val dexResponse = dexscreenerApi.getTokenPairs(token.contractAddress)
+                                    val dexData = dexResponse.pairs?.maxByOrNull { it.volume?.h24 ?: 0.0 }
+                                    price = dexData?.priceUsd?.toDouble() ?: 0.0
+                                    priceChange = dexData?.priceChange?.h24 ?: 0.0
+                                } catch (e: Exception) { }
+                            }
+                            
+                            val balanceUsd = tokenBalance.multiply(BigDecimal(price))
+
+                            resultList.add(
+                                AssetUiModel(
+                                    id = "token-${token.id}",
+                                    symbol = token.symbol,
+                                    name = token.name,
+                                    balance = String.format("%.7f %s", tokenBalance, token.symbol).trimEnd('0').trimEnd('.'),
+                                    balanceUsd = String.format("$%.2f", balanceUsd),
+                                    iconUrl = null,
+                                    networkName = net.name,
+                                    chainId = net.id,
+                                    contractAddress = token.contractAddress,
+                                    rawBalance = tokenBalance.toDouble(),
+                                    price = price,
+                                    priceChange24h = priceChange
+                                )
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+
+            nativeJobs.awaitAll()
+            tokenJobs.awaitAll()
         }
 
         lastResultList = resultList

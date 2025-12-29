@@ -86,7 +86,6 @@ class Web3Bridge(
         val params = obj.optString("params", "[]")
         
         webView.post {
-            when (method) {
                 "eth_requestAccounts", "eth_accounts" -> {
                     sendResponse(id, "[\"$address\"]")
                 }
@@ -96,11 +95,29 @@ class Web3Bridge(
                 "net_version" -> {
                     sendResponse(id, "\"$chainId\"")
                 }
+                "wallet_switchEthereumChain" -> {
+                     // Params usually like [{"chainId": "0x..."}]
+                     try {
+                        val paramsArray = org.json.JSONArray(params)
+                        val chainObj = paramsArray.getJSONObject(0)
+                        val targetChainIdHex = chainObj.getString("chainId")
+                        val targetChainId = java.lang.Long.decode(targetChainIdHex)
+                        updateChainId(targetChainId)
+                        sendResponse(id, "null") 
+                     } catch (e: Exception) {
+                        sendError(id, "Failed to switch chain: ${e.message}")
+                     }
+                }
                 "eth_sendTransaction", "personal_sign", "eth_sign", "eth_signTypedData_v4" -> {
                     onActionRequest(Web3Request(id, method, params))
                 }
                 else -> {
-                    sendError(id, "Method $method not supported")
+                    // Default response for methods we don't explicitly handle but shouldn't error on
+                    if (method.startsWith("eth_")) {
+                        sendResponse(id, "null")
+                    } else {
+                        sendError(id, "Method $method not supported")
+                    }
                 }
             }
         }

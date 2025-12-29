@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -65,27 +66,38 @@ fun BrowserScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(2.dp, BrutalBlack)
-                .padding(8.dp),
+                .background(Color.White)
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BasicTextField(
-                value = inputUrl,
-                onValueChange = { inputUrl = it },
-                textStyle = TextStyle(
-                    color = BrutalBlack,
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 14.sp
-                ),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(onGo = {
-                    url = if (!inputUrl.startsWith("http")) "https://$inputUrl" else inputUrl
-                }),
-                singleLine = true,
-                cursorBrush = SolidColor(BrutalBlack),
+            IconButton(onClick = { url = "https://google.com" }) {
+                Icon(Icons.Default.Home, contentDescription = "Home", tint = BrutalBlack)
+            }
+            
+            Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 8.dp)
-            )
+                    .border(1.dp, BrutalBlack)
+                    .padding(horizontal = 8.dp, vertical = 6.dp)
+            ) {
+                BasicTextField(
+                    value = inputUrl,
+                    onValueChange = { inputUrl = it },
+                    textStyle = TextStyle(
+                        color = BrutalBlack,
+                        fontFamily = FontFamily.Monospace,
+                        fontSize = 13.sp
+                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = {
+                        url = if (!inputUrl.startsWith("http")) "https://$inputUrl" else inputUrl
+                    }),
+                    singleLine = true,
+                    cursorBrush = SolidColor(BrutalBlack),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            
             IconButton(onClick = {
                 url = if (!inputUrl.startsWith("http")) "https://$inputUrl" else inputUrl
             }) {
@@ -95,15 +107,18 @@ fun BrowserScreen(
             // Chain Selector Button
             Box(
                 modifier = Modifier
-                    .border(1.dp, BrutalBlack)
                     .clickable { showChainSelector = true }
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .padding(end = 8.dp)
             ) {
                 Text(
                     text = currentNetwork.symbol,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily.Monospace
+                    fontWeight = FontWeight.Black,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    modifier = Modifier
+                        .background(BrutalBlack)
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
+                    color = BrutalWhite
                 )
             }
         }

@@ -44,9 +44,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import com.antigravity.cryptowallet.utils.QrCodeGenerator
 
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Settings
@@ -68,7 +68,21 @@ class WalletViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
     
     // Tab State
+    // Tab State
     var selectedTab by mutableStateOf(0) // 0 = Assets, 1 = NFTs
+    
+    // Search State
+    var searchQuery by mutableStateOf("")
+    
+    val filteredAssets: List<com.antigravity.cryptowallet.data.models.AssetUiModel>
+        get() = if (searchQuery.isEmpty()) {
+            assets
+        } else {
+            assets.filter { 
+                it.name.contains(searchQuery, ignoreCase = true) || 
+                it.symbol.contains(searchQuery, ignoreCase = true) 
+            }
+        }
 
     init {
         loadData()
@@ -332,34 +346,69 @@ fun WalletScreen(
                         modifier = Modifier.size(32.dp)
                     )
                 }
-                androidx.compose.material3.IconButton(
-                    onClick = onSetupSecurity
-                ) {
-                    androidx.compose.material3.Icon(
-                        imageVector = Icons.Filled.Lock,
-                        contentDescription = "Security Settings",
-                        tint = BrutalBlack,
-                        modifier = Modifier.size(32.dp)
-                    )
+                    androidx.compose.material3.IconButton(
+                        onClick = onSetupSecurity
+                    ) {
+                        androidx.compose.material3.Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = "Settings",
+                            tint = BrutalBlack,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 }
             }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // Search Bar
+            androidx.compose.material3.OutlinedTextField(
+                value = viewModel.searchQuery,
+                onValueChange = { viewModel.searchQuery = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, BrutalBlack),
+                placeholder = { Text("Search 8000+ tokens...") },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                singleLine = true,
+                colors = androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = BrutalBlack,
+                    unfocusedBorderColor = BrutalBlack,
+                    cursorColor = BrutalBlack
+                )
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+        
+        // Balance Card
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(4.dp, BrutalBlack)
+                .background(Color.White)
+                .padding(24.dp)
+                // Add a simple "brutal shadow" effect
+                .offset(x = 4.dp, y = 4.dp)
+                .border(2.dp, BrutalBlack)
+                .background(Color.White)
+                .padding(bottom = 4.dp, end = 4.dp) // Offset workaround
+        ) {
+            Text(
+                text = "TOTAL BALANCE",
+                color = BrutalBlack,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = viewModel.totalBalanceUsd,
+                color = BrutalBlack,
+                fontSize = 42.sp,
+                fontWeight = FontWeight.Black,
+                letterSpacing = (-1).sp
+            )
         }
         
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        Text(
-            text = "TOTAL BALANCE",
-            color = BrutalBlack,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = viewModel.totalBalanceUsd,
-            color = BrutalBlack,
-            fontSize = 42.sp,
-            fontWeight = FontWeight.Black,
-            letterSpacing = (-1).sp
-        )
+        Spacer(modifier = Modifier.height(32.dp))
         
         // Copy Address Shortcut
         Row(
@@ -423,12 +472,15 @@ fun WalletScreen(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(viewModel.assets.size) { index ->
-                    val asset = viewModel.assets[index]
+                items(
+                    count = viewModel.filteredAssets.size,
+                    key = { index -> viewModel.filteredAssets[index].id } // Stable keys for performance
+                ) { index ->
+                    val asset = viewModel.filteredAssets[index]
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(1.dp, BrutalBlack)
+                            .border(2.dp, BrutalBlack)
                             .clickable { onNavigateToTokenDetail(asset.id) }
                             .padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
